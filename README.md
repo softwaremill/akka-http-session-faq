@@ -30,7 +30,7 @@ Another hard limit is the size of a session: for Cookies it is restricted to 4kB
 As long as you provide a serializer for your custom types, you can use them.
 Standard types like `String`, `Integer`, `Long`, `Double` and `Map<String, String>` are supported out of the box.
 
-[Here's an example](https://github.com/softwaremill/akka-http-session-faq/blob/master/src/main/java/session/data_types/StringTypeSession.java) with a `String` data type session:
+[Here's an example](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/data_types/StringTypeSession.java) with a `String` data type session:
 ```
 $ curl -i --data "a string type"  http://localhost:8080/api/do_login
 
@@ -43,7 +43,7 @@ Content-Length: 2
 
 ok
 ```
-[Here's an example](https://github.com/akka-http-session-faq/blob/master/src/main/java/session/data_types/LongTypeSession.java) with a `Long` data type session:
+[Here's an example](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/data_types/LongTypeSession.java) with a `Long` data type session:
 ```
 $ curl -i --data "12321"  http://localhost:8080/api/do_login
 
@@ -56,7 +56,7 @@ Content-Length: 2
 
 ok
 ```
-[Here's an example](https://github.com/akka-http-session-faq/blob/master/src/main/java/session/data_types/MapTypeSession.java) with a `Map<String, String>` data type session:
+[Here's an example](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/data_types/MapTypeSession.java) with a `Map<String, String>` data type session:
 ```
 $ curl -i --data "key1,value1:k2,v2"  http://localhost:8080/api/do_login
 
@@ -80,7 +80,7 @@ Content-Length: 6
 value1
 ```
 
-[Here's an example](https://github.com/akka-http-session-faq/blob/master/src/main/java/session/data_types/CustomTypeSession) with a `CustomType` data type session:
+[Here's an example](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/data_types/CustomTypeSession) with a `CustomType` data type session:
 ```
 $ curl -i --data "my_login,42"  http://localhost:8080/api/do_login
 
@@ -98,11 +98,11 @@ ok
 ### How can I transport the session between server and client?
 Two transport types are available: Cookies and Headers.
 
-### Why would I use Cookies? {#cookies}
+### <a name="cookies"></a>Why would I use Cookies?
 Using Cookies to send session data has the advantage that is is handled automatically by client applications, like a web browser. 
 Also Cookies do not require you to implement a storage, since it's built-in into the browser already.
 
-The [Cookie transport example](https://github.com/akka-http-session-faq/blob/master/src/main/java/session/transport/CookieTransport.java) shows a typical setup for Cookies. Below is a sample use case:
+The [Cookie transport example](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/transport/CookieTransport.java) shows a typical setup for Cookies. Below is a sample use case:
 
 ```
 $ curl -i http://localhost:8080/api/current_login
@@ -140,14 +140,14 @@ Content-Length: 8
 
 my_login
 ```
-### Why would I use Headers? {#headers}
+### <a name="headers"></a>Why would I use Headers?
 
 Headers are usually used in a non-Cookie world, like mobile. 
 You need to come up with a storage for the session data on your client application by yourself. 
 This is what browsers do for you when dealing with Cookies.  
 Additionally when using refresh tokens, they need to be persisted in that storage as well.
 
-Take a look at [the Header transport example](https://github.com/akka-http-session-faq/blob/master/src/main/java/session/transport/HeaderTransport.java) and how it works:
+Take a look at [the Header transport example](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/transport/HeaderTransport.java) and how it works:
 
 ```
 $ curl -i http://localhost:8080/api/current_login
@@ -187,10 +187,10 @@ Content-Length: 8
 my_login
 ```
 
-### How long does a session live? {#max-age}
+### <a name="max-age"></a>How long does a session live?
 By default a session expires after 1 week, configurable via the `akka.http.session.max-age` config property.
-[In this example](https://github.com/akka-http-session-faq/blob/master/src/main/resources/application.com) it is set to 5 minutes. 
-When running the [HeaderTransport example](https://github.com/akka-http-session-faq/blob/master/src/main/java/session/transport/HeaderTransport.java) we get:
+[In this example](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/resources/application.conf) it is set to 5 minutes. 
+When running the [HeaderTransport example](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/transport/HeaderTransport.java) we get:
 ```
 $ curl -i --data "my_login"  http://localhost:8080/api/do_login
 
@@ -210,7 +210,7 @@ The timestamp attached to the session is `1505470200180` and translates to `Fri 
 There is the `OneOff` session which when expired is of no use anymore.
 An alternative is the `Refreshable` session.
 It will provide the client with an additional `_refreshtoken` Cookie or `Set-Refresh-Token` Header, dependent on the transport type.
-The [RefreshableSession](https://github.com/akka-http-session-faq/blob/master/src/main/java/session/continuity/RefreshableSession.java) example shows how to use this type of sessions:
+The [RefreshableSession](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/continuity/RefreshableSession.java) example shows how to use this type of sessions:
 
 ```
 $ curl -i --data "my_login_"  http://localhost:8080/api/do_login
@@ -265,7 +265,7 @@ my_login_
 ### When do I need refreshable sessions?
 A refreshable session is typically used for "remember-me" functionality. 
 This is especially useful in mobile applications, where you log in once, and the session is remembered for a long time. 
-Make sure to adjust the `akka.http.session.refresh-token.max-age` config property in [application.conf](https://github.com/akka-http-session-faq/blob/master/src/main/resources/application.conf) which defaults to 1 month.
+Make sure to adjust the `akka.http.session.refresh-token.max-age` config property in [application.conf](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/resources/application.conf) which defaults to 1 month.
 Also, these sessions are persisted. 
 Although the default implementation stores the refresh tokens in-memory and they won't survive a server restart, 
 they still can be thought of a way of storing session details on the server side.
@@ -301,7 +301,7 @@ The supplied authentication is not authorized to access this resource
 
 ### Is the additional refresh token persistent?
 Yes. Therefore using refreshable sessions requires you to implement a storage for these tokens.
-An in-memory storage is provided as shown in the [RefreshableSession](https://github.com/akka-http-session-faq/blob/master/src/main/java/session/continuity/RefreshableSession.java) example.
+An in-memory storage is provided as shown in the [RefreshableSession](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/continuity/RefreshableSession.java) example.
 However using an in-memory database will invalidate all your refresh tokens when the server restarts.
  
 In this example a refresh token is issued and before the second request is sent, the server is restarted:
@@ -341,9 +341,9 @@ This can be either `OneOff` or `Refreshable`.
 ### Can a Cookie be stolen and be reused by an attacker?
 Yes.
 
-### How can I use Cookies in a secure way? {#secure-cookie}
+### <a name="secure-cookie"></a>How can I use Cookies in a secure way?
 1. Use the `invalidateSession` directive when a user logs out or doesn't need that session any longer.
-This is demonstrated by the `do_logout` route in the [CookieTransport example](https://github.com/akka-http-session-faq/blob/master/src/main/java/session/transport/CookieTransport.java).
+This is demonstrated by the `do_logout` route in the [CookieTransport example](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/transport/CookieTransport.java).
 Its purpose is to send an empty `_sessiondata` Cookie to the client (typically a browser). 
 In consequence, the browser should erase that Cookie to prevent an attacker to read the cookie later on.
 ```
@@ -364,7 +364,7 @@ It's still possible, that although the browser erased the Cookie, the attacker g
 2. Use a sensible `max-age` value which defaults to 7 days
 For use cases where it make sense, set the `max-age` property to a low value, for example `5 minutes`. 
 This is especially true, when your application allows to access sensitive data, like bank accounts, emails, etc.
-The `max-age` property is set in `application.conf`, like in [this example](https://github.com/akka-http-session-faq/blob/master/src/main/resources/application.conf).
+The `max-age` property is set in `application.conf`, like in [this example](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/resources/application.conf).
 Using a cookie which expired on `Thu Sep 14 2017 07:38:19` results in a `403` response, when used in a request at `07:39:43`:
 ``` 
 $ curl -i --cookie "_sessiondata=625617AD3A82A95149B2DAAA6B4444F633F298E5-1505374699373-xmy_login" http://localhost:8080/api/current_login
@@ -387,10 +387,10 @@ It prevents the browser from sending Cookies, if the request is not transmitted 
 There may be 3 types of Cookies being used in `akka-http-session` and all need to have this option enabled explicitly:
 `akka.http.session.cookie.secure`, `csrf.cookie.secure` and `refresh-token.cookie.secure`.
 
-### Even when a session is invalidated by `invalidateSession`, is it still available? {#invalidate-session}
+### <a name="invalidate-session"></a>Even when a session is invalidated by `invalidateSession`, is it still available?
 Yes. 
 The invalidation is just a way to inform the client, that it should erase the cookie.
-There is not session maintenance going on on the server side.
+There is no session maintenance going on on the server side.
 This means, a Cookie representing an invalidated session can still be used:
 ``` 
 $ curl -i --cookie "_sessiondata=625617AD3A82A95149B2DAAA6B4444F633F298E5-1505374699373-xmy_login" http://localhost:8080/api/current_login
@@ -485,7 +485,7 @@ The supplied authentication is not authorized to access this resource
 
 ### What does encryption provide me with?
 Enabling session data encryption allows to send data in a format that is not readable by the client.
-To enable session data encryption set the `akka.http.session.encrypt-data` config property in `application.conf`, like in [this resource file](https://github.com/akka-http-session-faq/blob/master/src/main/resources/application.conf).
+To enable session data encryption set the `akka.http.session.encrypt-data` config property in `application.conf`, like in [this resource file](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/resources/application.conf).
 As seen below, the client received a token, that can be used to access the secured resource, but the data itself is encrypted.
 
 ```
@@ -536,7 +536,7 @@ This directive is responsible for extracting the session result to be used furth
 A session result can be `Decoded` (valid), `CreatedFromToken`, `Expired`, `Corrupt` or having no token present `TokenNotFound`
 The directive does not require the client to provide a session.
 However if a session is present, a result is made available to the server for further processing.
-[This example](https://github.com/akka-http-session-faq/blob/master/src/main/java/session/directives/SessionDirective.java) shows two possibilities, either there is no session at all, or the session is present.
+[This example](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/directives/SessionDirective.java) shows two possibilities, either there is no session at all, or the session is present.
 ```
 $ curl -i --data "session_details"  http://localhost:8080/api/do_login
 
@@ -574,7 +574,7 @@ Content-Length: 15
 
 session_details
 ```
-A more detailed example is available in [VariousSessions.java](https://github.com/softwaremill/akka-http-session/blob/master/example/src/main/java/com/softwaremill/example/session/VariousSessionsJava.java).
+A more detailed example is available in [VariousSessions.java](https://github.com/softwaremill/akka-http-session/tree/master/example/src/main/java/com/softwaremill/example/session/VariousSessionsJava.java).
 
 ### What is the `invalidateSession` directive good for?
 This directive instructs the client to clean the Cookie or Header. 
@@ -585,13 +585,13 @@ Take a look at [How can I use Cookies in a secure way?](#secure-cookie) and [Eve
 This one is very similar to the `session` directive.
 In this case however, we get access to the session details, which is an `Optional`.
 Based on that we can decide on the server side, how to proceed.
-In the [OptionalSession](https://github.com/akka-http-session-faq/blob/master/src/main/java/session/directives/OptionalSession.java) example, we either reply with `no session` or with the session details, if present.   
+In the [OptionalSession](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/directives/OptionalSession.java) example, we either reply with `no session` or with the session details, if present.   
 
 ### What is the `requiredSession` directive good for?
 This directive is used to secure endpoints. 
 Submitting a HTTP request requires the client to provide a valid session.
 A session can be requested through an endpoint configured with the `setSession` directive.
-The [CookieTransport](https://github.com/akka-http-session-faq/blob/master/src/main/java/session/transport/CookieTransport.java) and [HeaderTransport](https://github.com/akka-http-session-faq/blob/master/src/main/java/session/transport/HeaderTransport.java) examples show how to use this directive.
+The [CookieTransport](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/transport/CookieTransport.java) and [HeaderTransport](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/transport/HeaderTransport.java) examples show how to use this directive.
 Also a sample use case of securing an endpoint is shown in [the Cookie](#cookies) and [the Header](#headers) transport example. 
 
 ### What is the `touchRequiredSession` directive good for?
@@ -599,7 +599,7 @@ Sessions do expire and the max age is configurable, as mentioned in [How long do
 If you want to expose an endpoint that will reset the expiry date, include the `touchRequiredSession` in the route chain.
 Besides the expiry date, the whole token will change.
 Again when using Cookies, the browser will handle this, and replace the old Cookie, but in your own client application you have to replace the Cookie or Header by yourself.
-This directive is demonstrated in the [TouchRequiredSession](https://github.com/akka-http-session-faq/blob/master/src/main/java/session/directives/TouchRequiredSessionDirective.java) example:
+This directive is demonstrated in the [TouchRequiredSession](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/directives/TouchRequiredSessionDirective.java) example:
 ```
 $ curl -i --data "my_login"  http://localhost:8080/api/do_login
 
@@ -660,7 +660,7 @@ In this case the session expired on `1505741661309`, which is `Mon Sep 18 2017 1
 ## JWT
 ### How do I use Json Web Tokens
 In case you want to use the JWT format for authorization tokens, replace the `BasicSessionEncoder` with the `JwtSessionEncoder` and choose one of the JWT serializers, like `JwtSessionSerializers.StringToJValueSessionSerializer`.
-The [JwtEncodedSession](https://github.com/akka-http-session-faq/blob/master/src/main/java/session/jwt/JwtEncodedSession.java) example shows this particular use case:
+The [JwtEncodedSession](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/jwt/JwtEncodedSession.java) example shows this particular use case:
 ```
 $ curl -i --data "my_login"  http://localhost:8080/api/do_login
 
@@ -707,7 +707,7 @@ But the attacker is not able to read the cookie value. Hence the attacker is not
 
 ### How do I enable CSRF protection
 Two directives, `randomTokenCsrfProtection` and `setNewCsrfToken`, are required.
-The example [CsrfProtection](https://github.com/akka-http-session-faq/blob/master/src/main/java/session/csrf/CsrfProtection.java) uses both directives.
+The example [CsrfProtection](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/csrf/CsrfProtection.java) uses both directives.
 Finally a `CheckHeader` component is required to intercept the route and lookup the header for the CSRF token.
 
 The first one, `randomTokenCsrfProtection`, sets a new CSRF token on every GET request in form of a `XSRF-TOKEN` Cookie.
