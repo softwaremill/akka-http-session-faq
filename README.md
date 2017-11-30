@@ -80,7 +80,7 @@ Content-Length: 6
 value1
 ```
 
-[Here's an example](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/data_types/CustomTypeSession) with a `CustomType` data type session:
+[Here's an example](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/data_types/CustomTypeSession.java) with a `CustomType` data type session:
 ```
 $ curl -i --data "my_login,42"  http://localhost:8080/api/do_login
 
@@ -205,7 +205,7 @@ ok
 ```
 The timestamp attached to the session is `1505470200180` and translates to `Fri Sep 15 2017 10:10:00` which is 5 minutes ahead of the time, when the request was sent `Fri, 15 Sep 2017 10:05:00 GMT`.
 
-## Session Continuity #{refreshable}
+## <a name="refreshable"> Session Continuity
 ### What type of sessions are available
 There is the `OneOff` session which when expired is of no use anymore.
 An alternative is the `Refreshable` session.
@@ -342,7 +342,8 @@ This can be either `OneOff` or `Refreshable`.
 Yes.
 
 ### <a name="secure-cookie"></a>How can I use Cookies in a secure way?
-1. Use the `invalidateSession` directive when a user logs out or doesn't need that session any longer.
+1. Use the `invalidateSession` directive when a user logs out or doesn't need that session any longer
+
 This is demonstrated by the `do_logout` route in the [CookieTransport example](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/transport/CookieTransport.java).
 Its purpose is to send an empty `_sessiondata` Cookie to the client (typically a browser). 
 In consequence, the browser should erase that Cookie to prevent an attacker to read the cookie later on.
@@ -362,6 +363,7 @@ The Cookie does no longer contain any session data.
 It's still possible, that although the browser erased the Cookie, the attacker got it. Therefore:  
 
 2. Use a sensible `max-age` value which defaults to 7 days
+
 For use cases where it make sense, set the `max-age` property to a low value, for example `5 minutes`. 
 This is especially true, when your application allows to access sensitive data, like bank accounts, emails, etc.
 The `max-age` property is set in `application.conf`, like in [this example](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/resources/application.conf).
@@ -380,6 +382,7 @@ The supplied authentication is not authorized to access this resource
 3. Secure your transfer protocol - use HTTPS.
 
 4. Enable the `Secure` option for Cookies
+
 The `Secure` attribute is explained in [RFC 6265](https://tools.ietf.org/html/rfc6265#section-4.1.2.5) in more detail. 
 This does not prevent the server from sending the Cookie to the client. 
 It's just a flag for the client. 
@@ -456,7 +459,7 @@ In such a use-case however, [Refresh Tokens](#refreshable) which are valid for 1
 
 ### Is it possible to modify the session data on the client side?
 No. The session is signed by the server and changes to the session's content are picked up and rejected.
-In other words, it is not possible to login with valid credentials and then havong a valid token pretend to be a different user, like in this example:
+In other words, it is not possible to login with valid credentials and then having a valid token pretend to be a different user, like in this example:
 
 ```
 $ curl -i -H "Authorization: EAA15F51D825EFBCC1A2A0D43C65CFCA505F2497-1505383157632-xmy_login" http://localhost:8080/api/current_login
@@ -520,7 +523,7 @@ You may not want to share it for various reasons, like when it is a sequential n
 Another example would be data that is expensive to fetch or require access to a paid API or a 3rd party call.
 If such data has to be put in context with a particular user, therefore sent as part of the session data, and the client should not be able to read it, then encryption is the way to go.
 
-## Session Directives #{directives}
+## <a name="directives"></a> Session Directives
 ### What are these session directives exactly for?
 Including `akka-http-session` directives into the route chain, you can require an endpoint to be accessible only, if a valid session is provided by the client.
 Also there's a directive to initiate or invalidate a session when accessing a particular endpoint. 
@@ -531,7 +534,7 @@ Adding this directive to a route chain allows you to initialize a session.
 Depending on the transport type, either a `Set-Authorization` header or a `Set-Cookie` header are set with a new session.
 It is up to the client to read the appropriate Header and use the session in subsequent calls.
  
-### What is the `session` directive good for? #{session-directive}
+### <a name="session-directive"></a> What is the `session` directive good for?
 This directive is responsible for extracting the session result to be used further on the server side.
 A session result can be `Decoded` (valid), `CreatedFromToken`, `Expired`, `Corrupt` or having no token present `TokenNotFound`
 The directive does not require the client to provide a session.
@@ -585,7 +588,7 @@ Take a look at [How can I use Cookies in a secure way?](#secure-cookie) and [Eve
 This one is very similar to the `session` directive.
 In this case however, we get access to the session details, which is an `Optional`.
 Based on that we can decide on the server side, how to proceed.
-In the [OptionalSession](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/directives/OptionalSession.java) example, we either reply with `no session` or with the session details, if present.   
+In the [OptionalSession](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/directives/OptionalSessionDirective.java) example, we either reply with `no session` or with the session details, if present.   
 
 ### What is the `requiredSession` directive good for?
 This directive is used to secure endpoints. 
@@ -683,7 +686,6 @@ Content-Length: 8
 
 my_login
 ```
-**Do not forget to include the Bearer prefix, otherwise the server will display a WARN message.**
 
 ## CSRF protection
 ### What is it and (when) do I need it?
@@ -725,8 +727,6 @@ Welcome
 ```
 Without that cookie we would be not able to access the `/api/do_login` endpoint:
 ```
-$ curl -i --data "my_login" http://localhost:8080/api/do_login
-
 $ curl -i --data "my_login" http://localhost:8080/api/do_login
 HTTP/1.1 403 Forbidden
 Server: akka-http/10.0.9

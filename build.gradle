@@ -18,6 +18,6 @@ dependencies {
     compile "com.softwaremill.akka-http-session:core_2.11:$akkaHttpSessionV"
     compile "com.softwaremill.akka-http-session:jwt_2.11:$akkaHttpSessionV"
 
-    compile 'org.slf4j:slf4j-api:1.7.5'
+    compile 'org.slf4j:slf4j-log4j12:1.7.5'
 
 }
