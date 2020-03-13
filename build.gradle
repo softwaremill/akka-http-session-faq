@@ -10,10 +10,13 @@ repositories {
     mavenCentral()
 }
 
-def akkaHttpV = '10.0.9'
-def akkaHttpSessionV = '0.5.3'
+def akkaV = '2.5.19'
+def akkaHttpV = '10.1.8'
+def akkaHttpSessionV = '0.5.11'
 
 dependencies {
+    compile "com.typesafe.akka:akka-actor_2.11:$akkaV"
+    compile "com.typesafe.akka:akka-stream_2.11:$akkaV"
     compile "com.typesafe.akka:akka-http_2.11:$akkaHttpV"
     compile "com.softwaremill.akka-http-session:core_2.11:$akkaHttpSessionV"
     compile "com.softwaremill.akka-http-session:jwt_2.11:$akkaHttpSessionV"

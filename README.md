@@ -99,7 +99,7 @@ ok
 Two transport types are available: Cookies and Headers.
 
 ### <a name="cookies"></a>Why would I use Cookies?
-Using Cookies to send session data has the advantage that is is handled automatically by client applications, like a web browser. 
+Using Cookies to send session data has the advantage that it is handled automatically by client applications, like a web browser. 
 Also Cookies do not require you to implement a storage, since it's built-in into the browser already.
 
 The [Cookie transport example](https://github.com/softwaremill/akka-http-session-faq/tree/master/src/main/java/session/transport/CookieTransport.java) shows a typical setup for Cookies. Below is a sample use case:
@@ -128,7 +128,7 @@ Content-Length: 2
 
 ok
 ```
-The response tells us to set the `_sesiondata` Cookie.
+The response tells us to set the `_sessiondata` Cookie.
 ```
 $ curl -i --cookie "_sessiondata=625617AD3A82A95149B2DAAA6B4444F633F298E5-1505374699373-xmy_login" http://localhost:8080/api/current_login
 
@@ -691,7 +691,7 @@ my_login
 ### What is it and (when) do I need it?
 A CSRF attack is an attack, which tries to re-use a valid cookie to issue a request on your behalf.
 In short, you login to your bank account. A session Cookie is sent back to you.
-Now with every request to the bank's site, the Cookie is send by the browser.
+Now with every request to the bank's site, the Cookie is sent by the browser.
 If you open a new tab in your browser and navigate to a malicious web site you may find a prepared link.
 Clicking on that link will do a POST request to your bank's site.
 Since it is the bank's site, the session Cookie you received from your bank is also sent, hence the request is authorized.
@@ -752,7 +752,7 @@ ok
 ```
 Notice we received a new `XSRF-TOKEN` value. 
 This is achieved by the `setNewCsrfToken` directive.
-This is recommended to prevent a (session fixation attack)[https://security.stackexchange.com/questions/22903/why-refresh-csrf-token-per-form-request].
+This is recommended to prevent a [session fixation attack](https://security.stackexchange.com/questions/22903/why-refresh-csrf-token-per-form-request).
 Now we can access the `/api/do_logout` endpoint:
 ```
 $ curl -i -X POST --cookie "_sessiondata=5DEF1181A728E6C1724D263B23A8ABAF859046A8-1506081618995-xmy_login;XSRF-TOKEN=mm10u06r81ltjqf7c62c0pn0pc7opssl7gm2ucckom5e4mp0gjsvhn8pa8vr8ula" -H "X-XSRF-TOKEN: mm10u06r81ltjqf7c62c0pn0pc7opssl7gm2ucckom5e4mp0gjsvhn8pa8vr8ula" http://localhost:8080/api/do_logout
